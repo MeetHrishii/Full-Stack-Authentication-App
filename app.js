@@ -60,6 +60,57 @@ app.post("/register", (request, response) => {
     });
 });
 
+// Creating Login Endpoint
+app.post("/login", (request, response) => {
+  // Checking if the email that the user enters on login exists
+  // Using a then...catch... block to check if the email search 
+  // above was successful or not. If it is unsuccessful, capture 
+  // that in the catch block. If successful, compare the password
+  //  entered with the hashed password in the database. 
+  User.findOne({ email: request.body.email })
+    .then((user) => {
+      bcrypt.compare(request.body.password, user.password)
+      .then((passwordCheck) => {
+        // check if password matches
+        if(!passwordCheck){
+          return response.status(400).send({
+            message: "Passwords does not match",
+            error,
+          });
+        }
+        // if the password matches, generate a random token with the
+        // jwt.sign() function. It takes 3 parameters: 
+        // jwt.sign(payload, secretOrPrivateKey, [options, callback])
+        // Read more: https://www.npmjs.com/package/jsonwebtoken#usage
+        const token = jwt.sign(
+          {
+            userId : user._id,
+            userEmail: user.email,
+          },
+          "RANDOM-TOKEN",
+          { expiresIn: "24h" }
+        );
 
+        // return success response
+        response.status(200).send({
+          message: "Login Successful",
+          email: user.email,
+          token,
+        })
+      })
+      .catch((error) => {
+        response.status(400).send({
+          message: "Passwords does not match",
+          error,
+        });
+      })
+    })
+    .catch((e) => {
+      response.status(404).send({
+        message: "Email not found",
+        e,
+      })
+    })
+});
 
 module.exports = app;
