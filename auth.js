@@ -1,7 +1,7 @@
 // making a function to enable the app to protect 
 // a particular endpoint from unauthenticated users.
 
-const jwt = require("jasonwebtoken");
+const jwt = require("jsonwebtoken");
 
 module.exports = async (request, response, next) => {
     try {
