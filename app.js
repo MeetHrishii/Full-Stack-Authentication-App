@@ -7,6 +7,10 @@ const dbConnect = require("./db/dbConnect");
 const user = require("./db/userModel");
 // execute database connection
 dbConnect();
+const express = require("express");
+const app = express();
+const bodyParser = require("body-parser");
+
 // Handle CORS Errors
 // curb cores Error by addding a header here
 app.use((req, res, next) => {
@@ -21,9 +25,7 @@ app.use((req, res, next) => {
   );
   next();
 });
-const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
+
 
 // body parser configuration
 app.use(bodyParser.json());
