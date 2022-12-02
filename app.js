@@ -10,6 +10,7 @@ dbConnect();
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const auth = require("./auth");
 
 // Handle CORS Errors
 // curb cores Error by addding a header here
@@ -135,8 +136,6 @@ app.get("/free-endpoint", (request, response) => {
 });
 
 // authentication endpoint
-const auth = require("./auth");
-const { reset } = require("nodemon");
 app.get("/auth-endpoint", auth, (request, response) => {
   response.json({ message: "You are authorized to access me" });
 });
